@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Procedural Character Studio
 
-## Getting Started
+Laboratorio para crear personajes y animaciones mediante código TypeScript/Three.js escrito por cualquier modelo de IA. La web permite inspeccionar el resultado; el entregable final será un GLB con modelo y clips que PixelOver pueda renderizar a pixel art.
 
-First, run the development server:
+## Ejecutar
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Abrir la URL indicada por Next.js (normalmente http://localhost:3000).
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npx tsc --noEmit
+npm run lint
+npm run build
+npm run start
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+En PowerShell, si la política de ejecución bloquea `npm.ps1` o `npx.ps1`, utilizar `npm.cmd` y `npx.cmd` sin cambiar la política del sistema.
 
-## Learn More
+Si Next.js no puede cargar SWC nativo y Turbopack falla, usar su alternativa integrada:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm run dev -- --webpack
+npm run build -- --webpack
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Estado actual: fase B, revisión visual pendiente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Visor R3F ortográfico con órbita, zoom y restablecimiento de perfil desde +Z.
+- Guerrero de piezas rígidas generado con Three.js puro, mirando hacia +X.
+- Geometría low-poly perfilada: pecho/cintura, mandíbula, extremidades de sección variable y botas/martillo biselados; sin modelos externos ni nuevas dependencias.
+- Pivotes con nombres estables y martillo unido a la mano derecha.
+- Altura entre 1,2 y 2,4 m mediante escala uniforme.
+- Depuración de posiciones/ejes y ajustes manuales de giro local Z por articulación.
+- Restauración de pose, altura y cámara.
 
-## Deploy on Vercel
+**Todavía no hay clips de animación, exportación GLB, persistencia ni pruebas en PixelOver.** Los controles futuros permanecen deshabilitados.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Organización
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```text
+src/
+├── app/                              # Rutas, layout y estilos
+├── components/studio/
+│   ├── StudioClient.tsx               # Estado de controles y cámara
+│   ├── CharacterViewport.tsx          # Canvas, montaje y depuración
+│   └── CharacterControls.tsx          # Controles del personaje
+└── lib/characters/
+    ├── types.ts                      # Contrato común y nombres de articulaciones
+    ├── shared/
+    │   ├── geometry.ts                # Secciones octogonales cerradas y biseladas
+    │   ├── materials.ts               # Materiales propiedad de cada asset
+    │   └── dispose.ts                 # Liberación de recursos
+    └── hammer-warrior/
+        ├── index.ts                  # Entrada pública del personaje
+        ├── createCharacter.ts        # Geometría y ensamblaje
+        ├── proportions.ts            # Dimensiones, perfiles y ángulos de reposo
+        ├── rig.ts                    # Pivotes y pose de reposo
+        └── equipment.ts              # Martillo y origen de agarre
+```
+
+Las animaciones vivirán en `hammer-warrior/animations/` cuando se implemente la fase C. El exportador y validador comunes irán en `src/lib/io/` durante D.
+
+## Contrato para trabajar con cualquier IA
+
+1. El generador no depende de React, DOM ni WebGL: devuelve `CharacterAsset` con `root`, `joints`, `resetPose()` y `dispose()`.
+2. Unidades de referencia: metros; +Y arriba, +X frente, cámara lateral desde +Z; suelo Y = 0 en reposo.
+3. Mantener nombres de nodos únicos y estables: serán los destinos de los tracks de animación.
+4. El martillo pertenece a `Hand_R → WeaponGrip → Hammer`; las ayudas del visor quedan fuera de `CharacterRoot`.
+5. El visor mantiene el asset entre cambios de cámara y controles. La altura modifica la escala, no reconstruye geometrías.
+6. Cada instancia posee sus materiales/geometrías y debe liberarlos al desmontarse.
+7. Un personaje nuevo tendrá su propia carpeta en `src/lib/characters/`; no crear rutas en `src/app/` para almacenar modelos.
+
+## Prueba manual
+
+1. Orbitar arrastrando y pulsar **Profile** varias veces: siempre debe recuperar la vista lateral.
+2. Variar altura: comprobar encuadre y apoyo de los pies en reposo.
+3. Activar **Show rig**, elegir hombro/codo/cadera/rodilla y mover **Local Z offset**.
+4. Verificar que los segmentos giran desde sus articulaciones y que el martillo sigue la mano.
+5. Usar **Reset all joints** y **Reset character**.
+6. Revisar anatomía, separación del arma y silueta aproximadamente a 64 y 96 px de altura.
+
+Los giros manuales son solo depuración: no son clips exportables. No hay IK, límites anatómicos específicos ni prevención de intersecciones. El personaje no es `Bone`/`SkinnedMesh`; no se garantiza que PixelOver lo exponga como huesos editables.
+
+Consultar [notas del pipeline](docs/notas-pipeline.md) y [guía por fases](docs/GUIA_PIPELINE_THREEJS_CODEX_PIXELOVER.md).
