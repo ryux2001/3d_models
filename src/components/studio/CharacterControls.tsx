@@ -3,6 +3,7 @@
 import { HEIGHT_RANGE } from '@/lib/characters/hammer-warrior/proportions';
 import { JOINT_NAMES, type JointName, type JointPose } from '@/lib/characters/types';
 import styles from '@/app/page.module.css';
+import { INSPECTION_POSES, type InspectionPose } from '@/lib/characters/hammer-warrior/inspectionPoses';
 
 type Props = {
   height: number;
@@ -14,6 +15,8 @@ type Props = {
   onJointChange: (joint: JointName) => void;
   onAngleChange: (angle: number) => void;
   onResetPose: () => void;
+  inspectionPose: InspectionPose;
+  onInspectionPoseChange: (pose: InspectionPose) => void;
 };
 
 export function CharacterControls(props: Props) {
@@ -24,6 +27,15 @@ export function CharacterControls(props: Props) {
         <div><span className={styles.eyebrow}>INSPECTOR</span><h2>Hammer warrior</h2></div>
         <span className={styles.comingTag}>RIGID RIG</span>
       </div>
+      <section className={styles.inspectorSection}>
+        <h2 className={styles.controlHeading}>POSES DE INSPECCIÓN</h2>
+        <div className={styles.poseButtons}>
+          {INSPECTION_POSES.map((preset) => <button key={preset.id} aria-pressed={props.inspectionPose === preset.id}
+            className={`${styles.toolButton} ${props.inspectionPose === preset.id ? styles.toolSelected : ''}`}
+            onClick={() => props.onInspectionPoseChange(preset.id)}>{preset.label}</button>)}
+        </div>
+        <p className={styles.controlHelp}>Poses estáticas. Los ajustes Local Z se suman a la pose seleccionada.</p>
+      </section>
       <section className={styles.inspectorSection}>
         <h2 className={styles.controlHeading}>01 · PROPORTIONS</h2>
         <label className={styles.settingRow} htmlFor="character-height">
@@ -59,6 +71,7 @@ export function CharacterControls(props: Props) {
         <input id="joint-angle" className={styles.slider} type="range" min={-120} max={120} step={1}
           value={angle} onChange={(event) => props.onAngleChange(Number(event.target.value))} />
         <button className={styles.resetButton} onClick={props.onResetPose}>Reset all joints</button>
+        <p className={styles.controlHelp}>Restaura la pose seleccionada sin ajustes manuales.</p>
         <p className={styles.controlHelp}>Manual pivot test, not an animation. Extreme angles can intersect meshes or move feet off the ground.</p>
       </section>
       <section className={`${styles.inspectorSection} ${styles.animationSection}`}>

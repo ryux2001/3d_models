@@ -185,6 +185,44 @@
 .workspace button:not(:disabled) { cursor: pointer; }
 .workspace :is(button, input, select):focus-visible { outline: 2px solid var(--blue-bright); outline-offset: 3px; }
 
+.viewportStage { min-height: 480px; }
+.poseButtons { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+.poseButtons button { height: auto; min-height: 36px; padding: 8px; border-color: #30475e; color: #b7c9dc !important; font-size: 11px !important; }
+.pixelPanel { padding: 16px; border-top: 1px solid var(--line); }
+.pixelHeader { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+.pixelHeader h2 { margin: 0; color: #dbe4ef; font-size: 13px; font-weight: 500; }
+.pixelSamples { display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; margin-top: 16px; }
+.pixelSamples figure { margin: 0; max-width: 100%; overflow-x: auto; }
+.pixelSamples canvas { display: block; width: 218px; height: 218px; image-rendering: pixelated; background: #15202e; }
+.pixelSamples figure:nth-child(2) canvas { width: 328px; height: 328px; }
+.pixelSamples figcaption { margin-top: 8px; color: #dbe4ef; font-size: 12px; }
+.pixelSamples figcaption span { color: #9aafc7; }
+.pixelPanel .controlHelp { color: #a8b9cd; }
+.viewportToolbar { height: auto; min-height: 43px; flex-basis: auto; flex-wrap: wrap; gap: 8px; padding: 8px 10px; }
+.toolbarGroup { flex-wrap: wrap; }
+.toolbarGroup .toolButton { color: #a8b9cd !important; min-height: 32px; }
+
+.comparisonBar { width: 100%; max-width: 1450px; margin: 0 auto 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 14px 24px; padding: 14px 0; border-block: 1px solid var(--line); }
+.versionButtons { display: flex; flex-wrap: wrap; gap: 6px; }
+.versionButtons button { padding: 10px 12px; border: 1px solid #34475e; border-radius: 4px; background: transparent; color: #b7c9dc; font-size: 12px; }
+.versionButtons button[aria-pressed="true"] { border-color: #5fafe9; background: #142b40; color: #e3f3ff; }
+.versionButtons button:hover { background: #1a2c40; }
+.comparisonNote { flex-basis: 100%; margin: 0; font-size: 11px; color: #a8b9cd; line-height: 1.6; }
+.anatomyText { font-size: 12px; line-height: 1.7; color: #b0c0d3; margin-top: 12px; }
+.anatomyFacts { margin-top: 16px; font-size: 11px; }
+.anatomyFacts div { padding-block: 9px; border-bottom: 1px solid var(--line); }
+.anatomyFacts dt { color: #8fa5bd; margin-bottom: 4px; }
+.anatomyFacts dd { color: #dce6f1; margin: 0; }
+.inspectorSection .checkRow + .checkRow { margin-top: 16px; }
+
+@media (max-width: 780px) {
+  .studioGrid { grid-template-rows: auto auto; }
+  .pixelSamples { gap: 16px; }
+}
+@media (max-width: 400px) {
+  .pixelPanel { padding: 10px; }
+}
+
 @media (min-width: 1500px) {
   .mainArea { padding-right: 42px; padding-left: 42px; }
   .studioGrid { grid-template-columns: minmax(0, 1fr) 310px; gap: 17px; }
@@ -207,7 +245,7 @@
   .mainArea { padding: 23px 14px 0; }
   .pageHeading { align-items: flex-start; }
   .phasePill { margin-top: 17px; font-size: 7px; }
-  .studioGrid { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(390px, 56vh) auto; }
+  .studioGrid { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto auto; }
   .inspector { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); overflow: visible; }
   .inspectorHeader, .inspectorNote { grid-column: 1 / -1; }
   .inspectorHeader { padding: 12px 14px; }

@@ -1,7 +1,7 @@
 import { BufferGeometry, Float32BufferAttribute } from 'three';
 
-/** Horizontal section: Y, front/back radius, half-width in Z, X offset. */
-export type ProfileRing = readonly [y: number, depth: number, width: number, x?: number];
+/** Horizontal section: Y, front radius, half-width in Z, X offset, optional back radius. */
+export type ProfileRing = readonly [y: number, depth: number, width: number, x?: number, backDepth?: number];
 
 export type ProfileOptions = { section?: 'bevel' | 'ellipse'; segments?: number };
 
@@ -23,12 +23,12 @@ export function createProfileGeometry(rings: readonly ProfileRing[], options: Pr
   const count = outline.length;
   const positions: number[] = [];
   const indices: number[] = [];
-  rings.forEach(([y, depth, width, x = 0], ring) => {
-    if (![y, depth, width, x].every(Number.isFinite) || depth <= 0 || width <= 0) {
+  rings.forEach(([y, depth, width, x = 0, backDepth = depth], ring) => {
+    if (![y, depth, width, x, backDepth].every(Number.isFinite) || depth <= 0 || width <= 0 || backDepth <= 0) {
       throw new Error('Profile dimensions must be finite and radii positive.');
     }
     if (ring > 0 && y <= rings[ring - 1][0]) throw new Error('Profile rings must ascend in Y.');
-    for (const [dx, dz] of outline) positions.push(x + dx * depth, y, dz * width);
+    for (const [dx, dz] of outline) positions.push(x + dx * (dx < 0 ? backDepth : depth), y, dz * width);
     if (ring === 0) return;
     for (let side = 0; side < count; side++) {
       const next = (side + 1) % count;
@@ -40,10 +40,10 @@ export function createProfileGeometry(rings: readonly ProfileRing[], options: Pr
     }
   });
   for (const [ring, top] of [[0, false], [rings.length - 1, true]] as const) {
-    const [y, depth, width, x = 0] = rings[ring];
+    const [y, depth, width, x = 0, backDepth = depth] = rings[ring];
     // Duplicate cap rim so the side's normals never average with a horizontal cap.
     const rim = positions.length / 3;
-    for (const [dx, dz] of outline) positions.push(x + dx * depth, y, dz * width);
+    for (const [dx, dz] of outline) positions.push(x + dx * (dx < 0 ? backDepth : depth), y, dz * width);
     const center = positions.length / 3;
     positions.push(x, y, 0);
     for (let side = 0; side < count; side++) {

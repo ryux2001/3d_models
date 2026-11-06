@@ -69,6 +69,7 @@ export function createCharacter(height = DEFAULT_HEIGHT): CharacterAsset {
     const elbow = joints[`Elbow_${side}`];
     const hip = joints[`Hip_${side}`];
     const knee = joints[`Knee_${side}`];
+    roundDetail(hip, `HipJoint_${side}`, materials.cloth, [0.088, 0.10, 0.096], [0, -0.012, 0]);
     sculpt(shoulder, `ShoulderCap_${side}`, materials.jacket, body.shoulder);
     sculpt(shoulder, `UpperArm_${side}`, materials.jacket, body.upperArm);
     roundDetail(elbow, `ElbowCap_${side}`, materials.skin, [0.052, 0.052, 0.054], [0, 0, 0]);
@@ -76,13 +77,17 @@ export function createCharacter(height = DEFAULT_HEIGHT): CharacterAsset {
     sculpt(elbow, `Sleeve_Cuff_${side}`, materials.jacket, body.cuff);
     const hand = joints[`Hand_${side}`];
     sculpt(hand, `HandMesh_${side}`, materials.skin, body.hand);
-    roundDetail(hand, `Thumb_${side}`, materials.skin, [0.026, 0.032, 0.022], [0.036, -0.035, 0.025]);
+    const sign = side === 'R' ? 1 : -1;
+    roundDetail(hand, `Thumb_${side}`, materials.skin, [0.025, 0.035, 0.02], [0.028, -0.035, -sign * 0.032]);
+    roundDetail(hand, `Knuckles_${side}`, materials.skin, [0.025, 0.025, 0.043], [0.025, -0.073, 0]);
     sculpt(hip, `UpperLeg_${side}`, materials.cloth, body.thigh);
     // Small front patches, not the previous thick rings around each knee.
     sculpt(knee, `KneeCap_${side}`, materials.leather, body.knee);
+    roundDetail(knee, `KneeJoint_${side}`, materials.cloth, [0.056, 0.057, 0.056], [0, 0, 0]);
     sculpt(knee, `LowerLeg_${side}`, materials.cloth, body.shin);
     sculpt(knee, `BootShaft_${side}`, materials.leather, body.bootShaft);
     sculpt(joints[`Ankle_${side}`], `Foot_${side}`, materials.leather, body.foot);
+    roundDetail(joints[`Ankle_${side}`], `AnkleJoint_${side}`, materials.leather, [0.046, 0.06, 0.049], [0, 0, 0]);
   }
 
   const grip = new Group();

@@ -35,8 +35,12 @@ export function createRig() {
   joints.Shoulder_L.rotation.z = REST_POSE.shoulderL;
   joints.Elbow_L.rotation.z = REST_POSE.elbowL;
   const rest = new Map(JOINT_NAMES.map((name) => [name, joints[name].quaternion.clone()]));
+  const positions = new Map(JOINT_NAMES.map((name) => [name, joints[name].position.clone()]));
   const resetPose = () => {
-    for (const name of JOINT_NAMES) joints[name].quaternion.copy(rest.get(name)!);
+    for (const name of JOINT_NAMES) {
+      joints[name].quaternion.copy(rest.get(name)!);
+      joints[name].position.copy(positions.get(name)!);
+    }
   };
   return { root, joints, resetPose };
 }

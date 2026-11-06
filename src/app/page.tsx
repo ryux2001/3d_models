@@ -54,8 +54,8 @@ export default function Home() {
             <div className={styles.pipelineCard}>
               <span className={styles.pipelineEyebrow}>PIPELINE STATUS</span>
               <div className={styles.pipelineTrack}><span /></div>
-              <strong>Anatomy & pivots</strong>
-              <small>Phase B <span>·</span> Visual review pending</small>
+               <strong>Full-body anatomy</strong>
+               <small>V3.2 <span>·</span> A-pose review</small>
             </div>
             <div className={styles.railFooter}><span className={styles.onlineDot} /> ALL SYSTEMS LOCAL</div>
           </div>
@@ -68,7 +68,7 @@ export default function Home() {
               <h1 id="page-title">Build your <em>character.</em></h1>
               <p>Shape a 3D character, prepare its motion, and take it into pixel art.</p>
             </div>
-            <div className={styles.phasePill}><span>B</span> ANATOMY <b>·</b> REVIEW</div>
+             <div className={styles.phasePill}><span>V3.2</span> FULL BODY <b>·</b> REVIEW</div>
           </div>
 
           <StudioClient />

@@ -41,7 +41,7 @@ Construir un laboratorio web de portfolio para validar un pipeline de **personaj
 ## Trabajo con Codex
 
 - Implementar una fase cada vez: A visor → B anatomía → C clips → D GLB/reimportación → E PixelOver; F portfolio solo después.
-- Ejecutar `npx tsc --noEmit` y `npm run build` y corregir los errores. Ejecutar lint si existe el script en `package.json`.
+- Usar pnpm y conservar `pnpm-lock.yaml` como archivo de bloqueo. Ejecutar `pnpm exec tsc --noEmit` y `pnpm build` y corregir los errores. Ejecutar `pnpm lint` si existe el script en `package.json`.
 - Informar de archivos modificados, pasos para probar y limitaciones reales.
 - No afirmar que el resultado visual se ve bien si no se ha inspeccionado.
 - Cambios pequeños, commits entre fases, sin introducir sistemas de combate, multijugador ni economía de Godot en esta web.
