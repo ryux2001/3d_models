@@ -31,7 +31,8 @@ npm run build -- --webpack
 
 - Visor R3F ortográfico con órbita, zoom y restablecimiento de perfil desde +Z.
 - Guerrero de piezas rígidas generado con Three.js puro, mirando hacia +X.
-- Geometría low-poly perfilada: pecho/cintura, mandíbula, extremidades de sección variable y botas/martillo biselados; sin modelos externos ni nuevas dependencias.
+- Personaje masculino inspirado en la referencia de vestuario: chaqueta corta marrón con mangas remangadas, camiseta clara, pantalones oscuros y botas altas.
+- Anatomía con secciones elípticas de 12 lados y normales suaves; equipo biselado. Mandíbula, cabello y rasgos faciales simples; sin modelos externos ni nuevas dependencias.
 - Pivotes con nombres estables y martillo unido a la mano derecha.
 - Altura entre 1,2 y 2,4 m mediante escala uniforme.
 - Depuración de posiciones/ejes y ajustes manuales de giro local Z por articulación.
@@ -51,7 +52,7 @@ src/
 └── lib/characters/
     ├── types.ts                      # Contrato común y nombres de articulaciones
     ├── shared/
-    │   ├── geometry.ts                # Secciones octogonales cerradas y biseladas
+    │   ├── geometry.ts                # Perfiles elípticos suaves o biselados
     │   ├── materials.ts               # Materiales propiedad de cada asset
     │   └── dispose.ts                 # Liberación de recursos
     └── hammer-warrior/
@@ -84,5 +85,7 @@ Las animaciones vivirán en `hammer-warrior/animations/` cuando se implemente la
 6. Revisar anatomía, separación del arma y silueta aproximadamente a 64 y 96 px de altura.
 
 Los giros manuales son solo depuración: no son clips exportables. No hay IK, límites anatómicos específicos ni prevención de intersecciones. El personaje no es `Bone`/`SkinnedMesh`; no se garantiza que PixelOver lo exponga como huesos editables.
+
+La iteración actual se ha inspeccionado en WebGL con Edge headless y en recortes aproximados de 64/96 px, no en PixelOver. La ropa y el martillo se distinguen de perfil; las piernas oscuras se fusionan bastante a 64 px y el arma puede tapar parte de la cara en tres cuartos. La pose de reposo conserva el martillo vertical: no reproduce la pose sobre el hombro de la referencia.
 
 Consultar [notas del pipeline](docs/notas-pipeline.md) y [guía por fases](docs/GUIA_PIPELINE_THREEJS_CODEX_PIXELOVER.md).
